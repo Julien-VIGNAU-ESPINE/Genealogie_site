@@ -28,16 +28,34 @@
             width: 100%;
             background-color: #444;
             padding: 10px 0;
+            display: flex;
+            justify-content: center;
         }
 
         nav a {
             color: #fff;
             margin: 0 15px;
             text-decoration: none;
+            font-weight: bold;
+            position: relative;
         }
 
-        nav a:hover {
-            text-decoration: underline;
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        nav a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
         }
 
         .main-content {
@@ -147,7 +165,7 @@
         <a href="http://julien-vignau-espine.com" target="_blank" style="color: white">julien-vignau-espine.com</a>
     </footer>
 
-    <script> 
+    <script>
         const filesStructure = {
             "MOUTCHE": {
                 "Justin": {
