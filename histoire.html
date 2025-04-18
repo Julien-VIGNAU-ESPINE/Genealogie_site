@@ -4,169 +4,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explorateur de fichiers</title>
+    <title>Généalogie Vignau-Espine</title>
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Libre Baskerville', 'Georgia', serif;
             margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f5f0;
+            line-height: 1.6;
         }
-    
-        header,
-        footer {
-            width: 100%;
-            background-color: #333;
-            color: #fff;
+
+        header {
+            background-color: var(--primary);
+            color: white;
             text-align: center;
-            padding: 10px 0;
+            padding: 2rem 0;
+            position: relative;
+            background-image: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), url("/api/placeholder/1200/300");
+            background-size: cover;
+            background-position: center;
         }
-    
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
         nav {
-            width: 100%;
-            background-color: #444;
-            padding: 10px 0;
+            background-color: var(--secondary);
+            padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav ul {
             display: flex;
             justify-content: center;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
         }
-    
+
         nav a {
-            color: #fff;
-            margin: 0 15px;
+            color: white;
             text-decoration: none;
-            font-weight: bold;
-            position: relative;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
-    
-        nav a::after {
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .intro p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .section-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .section-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            margin-top: 0;
+            color: var(--dark);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .card-content p {
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #d35400;
+        }
+
+        .family-tree {
+            margin: 3rem 0;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .tree-container {
+            overflow-x: auto;
+        }
+
+        .tree {
+            min-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            padding-left: 0;
+        }
+
+        .tree li {
+            float: left;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+
+        .tree li::before,
+        .tree li::after {
             content: '';
             position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #fff;
-            transform-origin: bottom right;
-            transition: transform 0.25s ease-out;
+            top: 0;
+            right: 50%;
+            border-top: 1px solid #ccc;
+            width: 50%;
+            height: 20px;
         }
-    
-        nav a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 1px solid #ccc;
         }
-    
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-    
-        .file-explorer {
-            width: 300px;
-            background-color: #ffffff;
-            padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-    
-        .folder,
-        .file {
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-            margin-bottom: 5px;
-            position: relative;
-        }
-    
-        .folder {
-            cursor: pointer;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-        }
-    
-        .folder-name {
-            font-weight: bold;
-            color: #333;
-        }
-    
-        .folder-icon {
-            margin-right: 10px;
-        }
-    
-        .folder-icon::after {
-            content: '📁';
-            font-size: 20px;
-        }
-    
-        .folder.open {
-            background-color: #e0f7fa;
-        }
-    
-        .file {
-            color: #555;
-            background-color: #fff;
-            border: 1px solid #eee;
-            margin-left: 20px;
-        }
-    
-        .file-icon {
-            margin-right: 10px;
-        }
-    
-        .file-icon::after {
-            content: '📄';
-            font-size: 18px;
-        }
-    
-        .folder:hover,
-        .file:hover {
-            background-color: #f0f0f0;
-        }
-    
-        .sub-folder {
+
+        .tree li:only-child::after,
+        .tree li:only-child::before {
             display: none;
-            margin-left: 20px;
-            transition: opacity 0.3s;
-            opacity: 0;
         }
-    
-        .folder.open+.sub-folder {
-            display: block;
-            opacity: 1;
+
+        .tree li:only-child {
+            padding-top: 0;
+        }
+
+        .tree li:first-child::before,
+        .tree li:last-child::after {
+            border: 0 none;
+        }
+
+        .tree li:last-child::before {
+            border-right: 1px solid #ccc;
+            border-radius: 0 5px 0 0;
+        }
+
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 1px solid #ccc;
+            width: 0;
+            height: 20px;
+        }
+
+        .tree li a {
+            border: 1px solid #ccc;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: #333;
+            background-color: white;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .tree li a:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .person-card {
+            display: flex;
+            margin-bottom: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .person-image {
+            flex: 0 0 200px;
+            background-color: #eee;
+        }
+
+        .person-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .person-details {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        .person-name {
+            margin-top: 0;
+            font-size: 1.6rem;
+            color: var(--dark);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .person-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .person-bio {
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        .documents {
+            margin-top: 1.5rem;
+        }
+
+        .document-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: background-color 0.3s;
+        }
+
+        .document-link:hover {
+            background-color: #e9e9e9;
+        }
+
+        .document-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .sections {
+                grid-template-columns: 1fr;
+            }
+
+            .person-card {
+                flex-direction: column;
+            }
+
+            .person-image {
+                height: 250px;
+                flex: initial;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav a {
+                margin: 0.2rem 0;
+            }
         }
     </style>
 </head>
 
 <body>
-
     <header>
-        <h1>Généaologie Vignau-Espine</h1>
+        <h1>Généalogie Vignau-Espine</h1>
+        <p>Explorer l'histoire et les racines de notre famille</p>
     </header>
 
     <nav>
-        <a href="index.html">Accueil</a>
-        <a href="histoire.html">Histoire</a>
-        <a href="archives.html">Archives</a>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#individus">Individus</a></li>
+            <li><a href="#lieux">Lieux</a></li>
+            <li><a href="#arbre">Arbre généalogique</a></li>
+            <li><a href="#archives">Archives</a></li>
+        </ul>
     </nav>
 
     <div class="main-content">
-        
+        <section id="accueil" class="intro">
+            <h2>Bienvenue dans notre histoire familiale</h2>
+            <p>Découvrez la riche histoire de la famille Vignau-Espine à travers les générations. Ce site rassemble des
+                documents, des photographies et des récits qui retracent notre patrimoine familial du XIXe siècle à nos
+                jours.</p>
+        </section>
+
+        <section id="sections" class="sections">
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Photo ancêtres">
+                </div>
+                <div class="card-content">
+                    <h3>Individus</h3>
+                    <p>Découvrez les personnages marquants de notre famille, leur histoire et leur contribution à notre
+                        héritage.</p>
+                    <a href="#individus" class="btn">Explorer</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Photo lieux">
+                </div>
+                <div class="card-content">
+                    <h3>Lieux</h3>
+                    <p>Explorez les maisons familiales, les villages et les régions qui ont été témoins de notre
+                        histoire.</p>
+                    <a href="#lieux" class="btn">Découvrir</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Arbre généalogique">
+                </div>
+                <div class="card-content">
+                    <h3>Arbre généalogique</h3>
+                    <p>Visualisez les liens familiaux et parcourez l'arbre généalogique interactif de notre famille.</p>
+                    <a href="#arbre" class="btn">Visualiser</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="individus" class="family-members">
+            <h2>Personnages marquants</h2>
+
+            <div class="person-card">
+                <div class="person-image">
+                    <img src="/api/placeholder/200/300" alt="Justin Moutche">
+                </div>
+                <div class="person-details">
+                    <h3 class="person-name">Justin Moutche</h3>
+                    <div class="person-info">
+                        <div class="info-item">
+                            <span class="info-label">Naissance:</span> 15 mars 1885
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Décès:</span> 22 novembre 1967
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Lieu:</span> Bordeaux, France
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Profession:</span> Viticulteur
+                        </div>
+                    </div>
+                    <div class="person-bio">
+                        <p>Justin Moutche était un personnage important dans l'histoire de notre famille. Viticulteur
+                            respecté dans la région bordelaise, il a contribué au développement du patrimoine
+                            familial...</p>
+                    </div>
+                    <div class="documents">
+                        <h4>Documents associés:</h4>
+                        <a href="data/MOUTCHE/Justin/matricule.pdf" class="document-link" target="_blank">
+                            <span class="document-icon">📄</span> Fiche matricule
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vous pouvez ajouter d'autres personnages ici en suivant le même format -->
+        </section>
+
+        <section id="lieux" class="places">
+            <h2>Lieux importants</h2>
+
+            <div class="person-card">
+                <div class="person-image">
+                    <img src="/api/placeholder/200/300" alt="Maison familiale">
+                </div>
+                <div class="person-details">
+                    <h3 class="person-name">Domaine des Vignau</h3>
+                    <div class="person-info">
+                        <div class="info-item">
+                            <span class="info-label">Localisation:</span> Saint-Émilion, France
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Période:</span> 1890 - présent
+                        </div>
+                    </div>
+                    <div class="person-bio">
+                        <p>Le domaine viticole familial transmis de génération en génération depuis la fin du XIXe
+                            siècle. C'est ici que plusieurs membres de la famille ont vécu et travaillé...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vous pouvez ajouter d'autres lieux ici en suivant le même format -->
+        </section>
+
+        <section id="arbre" class="family-tree">
+            <h2>Arbre généalogique</h2>
+            <div class="tree-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <a href="#">Ancêtre Vignau</a>
+                            <ul>
+                                <li>
+                                    <a href="#">Justin Moutche</a>
+                                    <ul>
+                                        <li><a href="#">Enfant 1</a></li>
+                                        <li><a href="#">Enfant 2</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Branche 2</a>
+                                    <ul>
+                                        <li><a href="#">Sous-branche</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-center">Cliquez sur un nom pour afficher plus d'informations sur cette personne.</p>
+        </section>
+
+        <section id="archives" class="archives">
+            <h2>Archives et documents</h2>
+            <p>Explorez notre collection de documents historiques, photos, lettres et autres témoignages du passé.</p>
+
+            <div id="explorer" class="file-explorer">
+                <!-- L'explorateur de fichiers sera inséré ici par le script -->
+            </div>
+        </section>
     </div>
 
     <footer>
-        <p>&copy; 2025 Généaologie Vignau-Espine. Tous droits réservés.</p>
-        <a href="http://julien-vignau-espine.com" target="_blank" style="color: white">julien-vignau-espine.com</a>
+        <p>&copy; 2025 Généalogie Vignau-Espine. Tous droits réservés.</p>
+        <p>
+            <a href="http://julien-vignau-espine.com" target="_blank">julien-vignau-espine.com</a>
+        </p>
     </footer>
 
     <script>
+        // Structure des fichiers d'archives
         const filesStructure = {
             "MOUTCHE": {
                 "Justin": {
@@ -176,11 +576,23 @@
                     "Matricule.pdf": "data/MOUTCHE/test/test.pdf",
                 }
             },
-            "Dossier3": {
-                "fichier5.txt": "Contenu du fichier 5"
+            "Documents familiaux": {
+                "Actes de naissance": {
+                    "Acte1.pdf": "#"
+                },
+                "Actes de mariage": {
+                    "Acte1.pdf": "#"
+                }
+            },
+            "Lieux": {
+                "Domaine des Vignau": {
+                    "Photo1.jpg": "#",
+                    "Histoire.pdf": "#"
+                }
             }
         };
 
+        // Fonction pour créer l'explorateur de fichiers
         function createExplorer(parentElement, structure) {
             for (let key in structure) {
                 const element = document.createElement('div');
@@ -191,7 +603,8 @@
                         <span class="folder-icon"></span>
                         <span class="folder-name">${key}</span>
                     `;
-                    element.onclick = function () {
+                    element.onclick = function (event) {
+                        event.stopPropagation();
                         element.classList.toggle('open');
                     };
                     parentElement.appendChild(element);
@@ -203,8 +616,8 @@
                 } else {
                     element.classList.add('file');
                     const fileLink = document.createElement('a');
-                    fileLink.href = structure[key]; // Use the path from the structure
-                    fileLink.target = '_blank'; // Open in a new tab
+                    fileLink.href = structure[key]; // Utiliser le chemin depuis la structure
+                    fileLink.target = '_blank'; // Ouvrir dans un nouvel onglet
                     fileLink.innerHTML = `
                         <span class="file-icon"></span>
                         <span>${key}</span>
@@ -215,10 +628,29 @@
             }
         }
 
-        const root = document.getElementById('root');
-        createExplorer(root, filesStructure);
-    </script>
+        // Initialisation de l'explorateur de fichiers
+        window.onload = function () {
+            const explorerDiv = document.getElementById('explorer');
+            createExplorer(explorerDiv, filesStructure);
+        };
 
+        // Navigation fluide
+        document.querySelectorAll('nav a, .btn').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

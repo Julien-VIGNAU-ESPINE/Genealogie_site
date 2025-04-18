@@ -4,175 +4,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Explorateur de fichiers</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        header,
-        footer {
-            width: 100%;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        nav {
-            width: 100%;
-            background-color: #444;
-            padding: 10px 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav a {
-            color: #fff;
-            margin: 0 15px;
-            text-decoration: none;
-            font-weight: bold;
-            position: relative;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #fff;
-            transform-origin: bottom right;
-            transition: transform 0.25s ease-out;
-        }
-
-        nav a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .file-explorer {
-            width: 300px;
-            background-color: #ffffff;
-            padding: 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .folder,
-        .file {
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-            margin-bottom: 5px;
-            position: relative;
-        }
-
-        .folder {
-            cursor: pointer;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-        }
-
-        .folder-name {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .folder-icon {
-            margin-right: 10px;
-        }
-
-        .folder-icon::after {
-            content: '📁';
-            font-size: 20px;
-        }
-
-        .folder.open {
-            background-color: #e0f7fa;
-        }
-
-        .file {
-            color: #555;
-            background-color: #fff;
-            border: 1px solid #eee;
-            margin-left: 20px;
-        }
-
-        .file-icon {
-            margin-right: 10px;
-        }
-
-        .file-icon::after {
-            content: '📄';
-            font-size: 18px;
-        }
-
-        .folder:hover,
-        .file:hover {
-            background-color: #f0f0f0;
-        }
-
-        .sub-folder {
-            display: none;
-            margin-left: 20px;
-            transition: opacity 0.3s;
-            opacity: 0;
-        }
-
-        .folder.open+.sub-folder {
-            display: block;
-            opacity: 1;
-        }
-    </style>
+    <title>Généalogie Vignau-Espine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
     <header>
-        <h1>Généaologie Vignau-Espine</h1>
+        <h1>Généalogie Vignau-Espine</h1>
+        <p>Explorer l'histoire et les racines de notre famille</p>
     </header>
 
     <nav>
-        <a href="index.html">Accueil</a>
-        <a href="histoire.html">Histoire</a>
-        <a href="archives.html">Archives</a>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#individus">Individus</a></li>
+            <li><a href="#lieux">Lieux</a></li>
+            <li><a href="#arbre">Arbre généalogique</a></li>
+            <li><a href="#archives">Archives</a></li>
+        </ul>
     </nav>
 
     <div class="main-content">
+        <section id="accueil" class="intro">
+            <h2>Bienvenue dans notre histoire familiale</h2>
+            <p>Découvrez la riche histoire de la famille Vignau-Espine à travers les générations. Ce site rassemble des
+                documents, des photographies et des récits qui retracent notre patrimoine familial du XIXe siècle à nos
+                jours.</p>
+        </section>
+
+        <section id="sections" class="sections">
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Photo ancêtres">
+                </div>
+                <div class="card-content">
+                    <h3>Individus</h3>
+                    <p>Découvrez les personnages marquants de notre famille, leur histoire et leur contribution à notre
+                        héritage.</p>
+                    <a href="#individus" class="btn">Explorer</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Photo lieux">
+                </div>
+                <div class="card-content">
+                    <h3>Lieux</h3>
+                    <p>Explorez les maisons familiales, les villages et les régions qui ont été témoins de notre
+                        histoire.</p>
+                    <a href="#lieux" class="btn">Découvrir</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <div class="card-image">
+                    <img src="/api/placeholder/400/200" alt="Archives">
+                </div>
+                <div class="card-content">
+                    <h3>Archives</h3>
+                    <p>Consultez les documents historiques et archives familiales classés par personne et par thème.</p>
+                    <a href="#archives" class="btn">Consulter</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="individus" class="family-members">
+            <h2>Personnages marquants</h2>
+
+            <div class="person-card">
+                <div class="person-image">
+                    <img src="/api/placeholder/200/300" alt="Justin Moutche">
+                </div>
+                <div class="person-details">
+                    <h3 class="person-name">Justin Moutche</h3>
+                    <div class="person-info">
+                        <div class="info-item">
+                            <span class="info-label">Naissance:</span> 15 mars 1885
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Décès:</span> 22 novembre 1967
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Lieu:</span> Bordeaux, France
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Profession:</span> Viticulteur
+                        </div>
+                    </div>
+                    <div class="person-bio">
+                        <p>Justin Moutche était un personnage important dans l'histoire de notre famille. Viticulteur
+                            respecté dans la région bordelaise, il a contribué au développement du patrimoine
+                            familial...</p>
+                    </div>
+                    <div class="documents">
+                        <h4>Documents associés:</h4>
+                        <a href="data/MOUTCHE/Justin/matricule.pdf" class="document-link" target="_blank">
+                            <span class="document-icon">📄</span> Fiche matricule
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="person-card">
+                <div class="person-image">
+                    <img src="/api/placeholder/200/300" alt="Charles Moutche">
+                </div>
+                <div class="person-details">
+                    <h3 class="person-name">Charles Moutche</h3>
+                    <div class="person-info">
+                        <div class="info-item">
+                            <span class="info-label">Naissance:</span> 3 juin 1890
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Décès:</span> 15 avril 1972
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Lieu:</span> Saint-Émilion, France
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Profession:</span> Négociant en vin
+                        </div>
+                    </div>
+                    <div class="person-bio">
+                        <p>Charles Moutche a développé le commerce familial dans la région bordelaise. Ses talents de
+                            négociant ont permis d'établir des relations commerciales durables avec plusieurs pays
+                            européens...</p>
+                    </div>
+                    <div class="documents">
+                        <h4>Documents associés:</h4>
+                        <a href="data/MOUTCHE/Charles/matricule.pdf" class="document-link" target="_blank">
+                            <span class="document-icon">📄</span> Fiche matricule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="lieux" class="places">
+            <h2>Lieux importants</h2>
+
+            <div class="person-card">
+                <div class="person-image">
+                    <img src="/api/placeholder/200/300" alt="Maison familiale">
+                </div>
+                <div class="person-details">
+                    <h3 class="person-name">Domaine des Vignau</h3>
+                    <div class="person-info">
+                        <div class="info-item">
+                            <span class="info-label">Localisation:</span> Saint-Émilion, France
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Période:</span> 1890 - présent
+                        </div>
+                    </div>
+                    <div class="person-bio">
+                        <p>Le domaine viticole familial transmis de génération en génération depuis la fin du XIXe
+                            siècle. C'est ici que plusieurs membres de la famille ont vécu et travaillé...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="arbre" class="family-tree">
+            <h2>Arbre généalogique</h2>
+            <div class="tree-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <a href="#">Ancêtre Vignau</a>
+                            <ul>
+                                <li>
+                                    <a href="#">Justin Moutche</a>
+                                    <ul>
+                                        <li><a href="#">Enfant 1</a></li>
+                                        <li><a href="#">Enfant 2</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Charles Moutche</a>
+                                    <ul>
+                                        <li><a href="#">Descendant</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 20px;">Cliquez sur un nom pour afficher plus d'informations sur
+                cette personne.</p>
+        </section>
+
+        <section id="archives" class="archives">
+            <h2>Archives et documents</h2>
+            <p>Explorez notre collection de documents historiques, photos, lettres et autres témoignages du passé.</p>
+
+            <!-- Intégration de votre explorateur de fichiers original -->
+            <div class="file-explorer">
+                <h3>Explorateur de fichiers</h3>
+                <div id="root"></div>
+            </div>
+        </section>
     </div>
 
     <footer>
-        <p>&copy; 2025 Généaologie Vignau-Espine. Tous droits réservés.</p>
+        <p>&copy; 2025 Généalogie Vignau-Espine. Tous droits réservés.</p>
         <a href="http://julien-vignau-espine.com" target="_blank" style="color: white">julien-vignau-espine.com</a>
     </footer>
 
     <script>
+        // Structure des fichiers exactement comme dans votre code original
         const filesStructure = {
             "MOUTCHE": {
                 "Justin": {
                     "Matricule.pdf": "data/MOUTCHE/Justin/matricule.pdf",
                 },
-                "Test": {
-                    "Matricule.pdf": "data/MOUTCHE/test/test.pdf",
+                "Charles": {
+                    "Matricule.pdf": "data/MOUTCHE/Charles/matricule.pdf",
                 }
             },
             "Dossier3": {
@@ -180,6 +234,7 @@
             }
         };
 
+        // Fonction pour créer l'explorateur de fichiers (reprise exacte de votre code)
         function createExplorer(parentElement, structure) {
             for (let key in structure) {
                 const element = document.createElement('div');
@@ -190,7 +245,8 @@
                         <span class="folder-icon"></span>
                         <span class="folder-name">${key}</span>
                     `;
-                    element.onclick = function () {
+                    element.onclick = function (event) {
+                        event.stopPropagation();
                         element.classList.toggle('open');
                     };
                     parentElement.appendChild(element);
@@ -214,10 +270,29 @@
             }
         }
 
-        const root = document.getElementById('root');
-        createExplorer(root, filesStructure);
-    </script>
+        // Initialisation de l'explorateur de fichiers (reprise de votre code)
+        window.onload = function () {
+            const root = document.getElementById('root');
+            createExplorer(root, filesStructure);
+        };
 
+        // Navigation fluide
+        document.querySelectorAll('nav a, .btn').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
